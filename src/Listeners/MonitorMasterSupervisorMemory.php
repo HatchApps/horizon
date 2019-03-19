@@ -15,8 +15,12 @@ class MonitorMasterSupervisorMemory
     public function handle(MasterSupervisorLooped $event)
     {
         $master = $event->master;
+        $usage = $master->memoryUsage();
+        $limit = config('horizon.memory_limit', 64);
 
-        if ($master->memoryUsage() > config('horizon.memory_limit', 64)) {
+        if ($usage > $limit) {
+            $master->output('error', 'The supervisor has exceeded the configured memory limit and has been terminated. [Usage: '.$usage.' Limit: '.$limit.']');
+
             $master->terminate(12);
         }
     }

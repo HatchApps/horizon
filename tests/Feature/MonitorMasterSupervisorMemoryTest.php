@@ -16,6 +16,7 @@ class MonitorMasterSupervisorMemoryTest extends IntegrationTest
 
         $master = Mockery::mock(MasterSupervisor::class);
 
+        $master->shouldReceive('output');
         $master->shouldReceive('memoryUsage')->andReturn(192);
         $master->shouldReceive('terminate')->once()->with(12);
 
